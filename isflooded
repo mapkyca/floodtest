@@ -37,7 +37,7 @@ if ($contents = file_get_contents($url)) {
 	if ($currentheight >= $floodval) {
 		echo "Yes\n";
 	} else if  ($currentheight >= ($floodval * $maybe_percentage)) {
-		echo "Maybe..?\n";
+		echo "Almost\n";
 	} else {
 		echo "No\n";
 	}	
