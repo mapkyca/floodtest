@@ -1,0 +1,46 @@
+#!/usr/bin/php
+<?php
+
+$maybe_percentage = 0.9; // 90% of the flooded value is "maybe"
+
+$url = @$argv[1];
+if (!$url) {
+	echo "Usage: isflooded <url>\n";
+	echo "Where <url> is the link to the environment agency website, e.g. https://flood-warning-information.service.gov.uk/station/7405?direction=d\n";
+	echo "Will tell you whether the river is likely to be flooded (according to the environment agency's sensors and levels.\n";
+	exit;
+}
+
+if ($contents = file_get_contents($url)) {
+	
+	// Find current height
+	$currentheight = null;
+	if (preg_match('/<strong[^>]+>([0-9]+.[0-9]+)+m<\/strong>/', $contents, $matches)) {
+		$currentheight = $matches[1];
+		if (!$currentheight) die ("Could not get the current height of water from the sensor");
+	}
+
+	// Get json data	
+	$chartdata = null;
+	if (preg_match('/root\.chartData\ ?=\ ?(\{.*\})+/', $contents, $matches)) {
+		$chartdata = json_decode($matches[1]);
+
+		if (!$chartdata) die("Could not extract chart data from JSON blob");
+
+		$floodval = $chartdata->floodValue[0];
+
+		if (!$floodval) die ("Could not get a flood level for this sensor");
+	}
+
+
+	// Do some comparisons
+	if ($currentheight >= $floodval) {
+		echo "Yes\n";
+	} else if  ($currentheight >= ($floodval * $maybe_percentage)) {
+		echo "Maybe..?\n";
+	} else {
+		echo "No\n";
+	}	
+}
+else
+	die("Could not reach $url");
