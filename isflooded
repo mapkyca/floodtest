@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-$maybe_percentage = 0.9; // 90% of the flooded value is "maybe"
+$maybe_percentage = 0.95; // 95% of the flooded value is "maybe"
 
 $url = @$argv[1];
 if (!$url) {
