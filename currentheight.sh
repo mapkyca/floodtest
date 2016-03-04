@@ -5,4 +5,4 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-curl -s $1 | grep -P '<strong[^>]+>([0-9]+.[0-9]+m)+</strong>' | grep -Po '[0-9]+\.[0-9]+m'
+curl -s $1 | grep -P '<strong>([0-9]+.[0-9]+m)+</strong>' | grep -Po '[0-9]+\.[0-9]+m'
