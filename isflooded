@@ -12,7 +12,7 @@ if (!$url) {
 }
 
 if ($contents = file_get_contents($url)) {
-	
+
 	// Find current height
 	$currentheight = null;
 	if (preg_match('/<strong>([0-9]+.[0-9]+)+m<\/strong>/', $contents, $matches)) {
@@ -23,12 +23,12 @@ if ($contents = file_get_contents($url)) {
 	// Get json data	
 	$chartdata = null;
 	$floodval = null;
-	if (preg_match('/chart\:\ ?\ ?(\{.*\})+/', $contents, $matches)) {
+	if (preg_match('/station\:\ ?\ ?(\{.*\})+/', $contents, $matches)) {
 		$chartdata = json_decode($matches[1]);
 
 		if (!$chartdata) die("Could not extract chart data from JSON blob");
 
-		$floodval = $chartdata->floodValue[0];
+		$floodval = $chartdata->percentile5; //$chartdata->floodValue[0];
 	} 
         if (!$floodval) die ("Could not get a flood level for this sensor");
 
