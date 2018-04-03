@@ -15,10 +15,12 @@ if ($contents = file_get_contents($url)) {
 
 	// Find current height
 	$currentheight = null;
-	if (preg_match('/<strong>([0-9]+.[0-9]+)+m<\/strong>/', $contents, $matches)) {
+	if (preg_match('/<strong.*>([0-9]+.[0-9]+)+m<\/strong>/', $contents, $matches)) {
 		$currentheight = $matches[1];
-		if (!$currentheight) die ("Could not get the current height of water from the sensor");
 	}
+
+        if (!$currentheight) die ("Could not get the current height of water from the sensor");
+
 
 	// Get json data	
 	$chartdata = null;
@@ -31,8 +33,6 @@ if ($contents = file_get_contents($url)) {
 		$floodval = $chartdata->percentile5; //$chartdata->floodValue[0];
 	} 
         if (!$floodval) die ("Could not get a flood level for this sensor");
-
-
 
 	// Do some comparisons
 	if ($currentheight >= $floodval) {
